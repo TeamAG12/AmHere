@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "335508449192",
+    "project_id": "amhere-bafeb",
+    "storage_bucket": "amhere-bafeb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:335508449192:android:407a3c4b78219e3a279f9d",
+        "android_client_info": {
+          "package_name": "com.example.amhere"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "335508449192-jlmu8rukci6vllkrndhtcgg41k9l81c1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.amhere",
+            "certificate_hash": "51068b8aa53d2fc31ebdf2e56014d0912d7ef59d"
+          }
+        },
+        {
+          "client_id": "335508449192-opcdg4q2n99tq7vi3pfk89mnj79424md.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7g0IATct21szcR9rpPrkHAE_WA5wZX9w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "335508449192-opcdg4q2n99tq7vi3pfk89mnj79424md.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
