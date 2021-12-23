@@ -1,100 +1,80 @@
 package com.example.amhere
 
+import android.app.ProgressDialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.NonNull
-import com.google.android.gms.tasks.Task
-import java.util.jar.Attributes
+import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
-    private EditText Name, Password;
-    private Button Login;
-    private TextView Info;
-    private int counter = 5;
-    private TextView userRegistration;
-    private FirebaseAuth firebaseAuth;
-    private ProgressDialog progressDialog;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        Attributes.Name = (EditText) findViewById(R.id.etName);
-        Password = (EditText) findViewById(R.id.etPassword);
-        Login = (Button) findViewById(R.id.btnLogin);
-        Info = (TextView) findViewById(R.id.tvInfo);
-        userRegistration = (TextView) findViewById(R.id.tvRegister);
-
-        Info.setText("No of attempt remaining : 5");
-
-        firebaseAuth = FirebaseAuth.getInstance();
-        progressDialog = new ProgressDialog(this);
-
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-
+    private var Name: EditText? = null
+    private var Password: EditText? = null
+    private var Login: Button? = null
+    private var Info: TextView? = null
+    private var counter = 5
+    private var userRegistration: TextView? = null
+    private var firebaseAuth: FirebaseAuth? = null
+    private var progressDialog: ProgressDialog? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        Name = findViewById<View>(R.id.etName) as EditText
+        Password = findViewById<View>(R.id.etPassword) as EditText
+        Login = findViewById<View>(R.id.btnLogin) as Button
+        Info = findViewById<View>(R.id.tvInfo) as TextView
+        userRegistration = findViewById<View>(R.id.tvRegister) as TextView
+        Info!!.text = "No of attempt remaining : 5"
+        firebaseAuth = FirebaseAuth.getInstance()
+        progressDialog = ProgressDialog(this)
+        val user = firebaseAuth!!.currentUser
         if (user != null) {
-            finish();
-            startActivity(new Intent(MainActivity.this, SecondActivity.class));
+            finish()
+            startActivity(Intent(this@MainActivity, AttendedActivity::class.java))
         }
-
-        Login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                validate(Name.getText().toString(), Password.getText().toString());
-            }
-        });
-
-        userRegistration.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, RegistrationadminActivity.class));
-            }
-        });
-
+        Login!!.setOnClickListener { validate(Name!!.text.toString(), Password!!.text.toString()) }
+        userRegistration!!.setOnClickListener {
+            startActivity(
+                Intent(
+                    this@MainActivity,
+                    SignUpActivity::class.java
+                )
+            )
+        }
     }
 
-    public void learnMore(View view) {
-        Intent intent = new Intent(MainActivity.this, LearnMoreActivity.class);
-        startActivity(intent);
+    fun learnMore(view: View?) {
+//        val intent = Intent(this@MainActivity, LearnMoreActivity::class.java)
+//        startActivity(intent)
     }
 
-
-    public void aboutUs(View view) {
-        Intent intent = new Intent(MainActivity.this, AboutUsActivity.class);
-        startActivity(intent);
+    fun aboutUs(view: View?) {
+//        val intent = Intent(this@MainActivity, AboutUsActivity::class.java)
+//        startActivity(intent)
     }
 
-    private void validate(String userName, String userPassword) {
-
-        progressDialog.setMessage("Please Wait");
-        progressDialog.show();
-
-
-        firebaseAuth.signInWithEmailAndPassword(userName, userPassword)
-            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull (Task<AuthResult>) task) {
-                if (task.isSuccessful()) {
-                    progressDialog.dismiss();
-                    Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(MainActivity.this, SecondActivity.class));
+    private fun validate(userName: String, userPassword: String) {
+        progressDialog!!.setMessage("Please Wait")
+        progressDialog!!.show()
+        firebaseAuth!!.signInWithEmailAndPassword(userName, userPassword)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    progressDialog!!.dismiss()
+                    Toast.makeText(this@MainActivity, "Login Successful", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this@MainActivity, AttendedActivity::class.java))
                 } else {
-                    Toast.makeText(MainActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
-                    counter--;
-                    Info.setText("No of attempt remaining : " + counter);
-                    progressDialog.dismiss();
+                    Toast.makeText(this@MainActivity, "Login Failed", Toast.LENGTH_SHORT).show()
+                    counter--
+                    Info!!.text = "No of attempt remaining : $counter"
+                    progressDialog!!.dismiss()
                     if (counter == 0) {
-                        Login.setEnabled(false);
+                        Login!!.isEnabled = false
                     }
                 }
             }
-        });
     }
 }
